@@ -42,6 +42,7 @@ class Article extends \yii\db\ActiveRecord
             [['date'], 'date', 'format'=>'php:Y-m-d'],
             [['date'], 'default', 'value' => date('Y-m-d')],
             [['title'], 'string', 'max' => 255],
+            [['categoryId'], 'number']
         ];
     }
 
@@ -81,6 +82,20 @@ class Article extends \yii\db\ActiveRecord
     {
         $this->deleteImage();
         return parent::beforeDelete();
+    }
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'categoryId']);
+    }
+
+    public function saveCategory($categoryId)
+    {
+        $category = Category::findOne($categoryId);
+        if($category != null)
+        {
+            $this->link('category', $category);
+            return true;
+        }
     }
 
 }
