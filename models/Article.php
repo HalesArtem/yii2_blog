@@ -134,13 +134,13 @@ class Article extends \yii\db\ActiveRecord
         Yii::$app->formatter->locale = 'ru-RU';
         return Yii::$app->formatter->asDate($this->date);
     }
-    public static function  getAll()
+    public static function  getAll($pageSize = 1)
     {
         $query = Article::find();
 
         $count = $query->count();
 
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize'=>1]);
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize'=>$pageSize]);
 
         $articles = $query->offset($pagination->offset)
             ->limit($pagination->limit)
@@ -150,5 +150,13 @@ class Article extends \yii\db\ActiveRecord
         $data['pagination'] = $pagination;
 
         return $data;
+    }
+    public static function getPopular()
+    {
+        return Article::find()->orderBy('viewed desc')->limit(3)->all();
+    }
+    public static function getRecent()
+    {
+        return Article::find()->orderBy('date asc')->limit(4)->all();
     }
 }

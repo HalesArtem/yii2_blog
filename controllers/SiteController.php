@@ -64,11 +64,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $data = Article::getAll();
-
-        $popular = Article::find()->orderBy('viewed desc')->limit(3)->all();
-        $recent = Article::find()->orderBy('date asc')->limit(4)->all();
-        $categories = Category::find()->all();
+        $data = Article::getAll(3);
+        $popular = Article::getPopular();
+        $recent = Article::getRecent();
+        $categories = Category::getAll();
 
         return $this->render('index',[
             'articles'=>$data['articles'],
